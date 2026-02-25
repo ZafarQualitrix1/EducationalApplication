@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
+
 const helmet = require("helmet");
 const compression = require("compression");
 const rateLimit = require("express-rate-limit");
@@ -18,6 +19,7 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cors());
 app.use(express.static(path.join(__dirname, "uploads")));
+
 app.use(helmet());
 app.use(compression());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
