@@ -1,0 +1,6 @@
+{
+  "build": "npm run build --prefix frontend",
+  "start": "node backend/server.js",
+  "healthcheck": "/health",
+  "watch": ["backend", "frontend"]
+}
