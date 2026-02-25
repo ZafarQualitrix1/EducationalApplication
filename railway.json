@@ -1,6 +1,12 @@
 {
-  "build": "npm run build --prefix frontend",
-  "start": "node backend/server.js",
-  "healthcheck": "/health",
+  "build": {
+    "command": "npm run build --prefix frontend"
+  },
+  "start": {
+    "command": "node backend/server.js"
+  },
+  "healthcheck": {
+    "path": "/health"
+  },
   "watch": ["backend", "frontend"]
 }
