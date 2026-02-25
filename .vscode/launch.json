@@ -1,0 +1,46 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        // ================= Node.js Debug (Backend) =================
+        {
+            "name": "Attach to Node",
+            "type": "node",
+            "request": "attach",
+            "port": 9229,
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+
+        // ================= Chrome Debug (Frontend) =================
+        {
+            "name": "Launch Chrome - React App",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/frontend/src",
+            "userDataDir": "${workspaceFolder}/.vscode/chrome" 
+        },
+
+        // ================= Edge Debug (Optional) =================
+        {
+            "name": "Launch Edge - React App",
+            "type": "msedge",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/frontend/src",
+            "userDataDir": "${workspaceFolder}/.vscode/edge"
+        },
+        // ================= Firefox Debug (Optional) =================
+        {
+            "name": "Launch Firefox - React App",
+            "type": "firefox",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/frontend/src",
+            "reAttach": true,
+            "reloadOnAttach": true
+        }
+    ]
+}

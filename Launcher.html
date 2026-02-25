@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Warrior - Application Launcher</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .logo {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .server-section {
+            margin-bottom: 30px;
+        }
+
+        .server-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .server-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .status-indicator.offline {
+            background-color: #e74c3c;
+            animation: blink 1s infinite;
+        }
+
+        .status-indicator.online {
+            background-color: #27ae60;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.6; }
+        }
+
+        .details {
+            padding: 15px;
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .details p {
+            margin: 5px 0;
+        }
+
+        .details code {
+            background: #e8e8e8;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #333;
+        }
+
+        .url {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .url:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .url.disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .btn-launch {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-launch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-launch:active {
+            transform: translateY(0);
+        }
+
+        .btn-check {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-check:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .btn-stop {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-stop:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .instructions {
+            background: #ecf0f1;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .instructions h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            display: block;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            button {
+                min-width: 100%;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🚀</div>
+            <h1>Code Warrior</h1>
+            <p>Application Launcher Dashboard</p>
+        </div>
+
+        <div id="alert" class="alert"></div>
+
+        <div class="server-section">
+            <div class="server-title">
+                <span class="server-icon">⚙️</span>
+                Backend Server
+            </div>
+            <div class="status">
+                <span class="status-indicator offline" id="backend-status"></span>
+                <span id="backend-status-text">Offline</span>
+            </div>
+            <div class="details">
+                <p><strong>Language:</strong> Node.js / Express</p>
+                <p><strong>Database:</strong> MySQL</p>
+                <p><strong>Port:</strong> 5000</p>
+                <p><strong>URL:</strong> <code>http://localhost:5000</code></p>
+                <a href="http://localhost:5000" target="_blank" class="url disabled" id="backend-url">Open Backend</a>
+            </div>
+        </div>
+
+        <div class="server-section">
+            <div class="server-title">
+                <span class="server-icon">⚛️</span>
+                Frontend Server
+            </div>
+            <div class="status">
+                <span class="status-indicator offline" id="frontend-status"></span>
+                <span id="frontend-status-text">Offline</span>
+            </div>
+            <div class="details">
+                <p><strong>Framework:</strong> React 19</p>
+                <p><strong>Port:</strong> 3000</p>
+                <p><strong>URL:</strong> <code>http://localhost:3000</code></p>
+                <a href="http://localhost:3000" target="_blank" class="url disabled" id="frontend-url">Open Frontend</a>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-launch" onclick="launchServers()">🚀 Launch Servers</button>
+            <button class="btn-check" onclick="checkStatus()">🔍 Check Status</button>
+            <button class="btn-stop" onclick="stopServers()">🛑 Stop Servers</button>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 How to Launch:</h3>
+            <ol>
+                <li>Click the <strong>"Launch Servers"</strong> button above</li>
+                <li>Wait 5-10 seconds for servers to start</li>
+                <li>Click <strong>"Check Status"</strong> to verify both are running</li>
+                <li>Click the URLs to access the applications</li>
+                <li>Click <strong>"Stop Servers"</strong> when done</li>
+            </ol>
+        </div>
+
+        <div class="footer">
+            <p>Code Warrior Application v1.0</p>
+            <p>© 2026 All Rights Reserved</p>
+        </div>
+    </div>
+
+    <script>
+        // Check if servers are running
+        async function checkServerStatus() {
+            try {
+                const backendResponse = fetch('http://localhost:5000/signup', { method: 'GET', mode: 'no-cors' });
+                const frontendResponse = fetch('http://localhost:3000', { method: 'GET', mode: 'no-cors' });
+                
+                await Promise.all([backendResponse, frontendResponse]);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        async function checkStatus() {
+            showAlert('Checking server status...', 'info');
+            
+            try {
+                const backendOnline = await new Promise((resolve) => {
+                    fetch('http://localhost:5000', { method: 'GET', mode: 'no-cors' })
+                        .then(() => resolve(true))
+                        .catch(() => resolve(false));
+                    setTimeout(() => resolve(false), 3000);
+                });
+
+                const frontendOnline = await new Promise((resolve) => {
+                    fetch('http://localhost:3000', { method: 'GET', mode: 'no-cors' })
+                        .then(() => resolve(true))
+                        .catch(() => resolve(false));
+                    setTimeout(() => resolve(false), 3000);
+                });
+
+                updateStatus(backendOnline, frontendOnline);
+
+                if (backendOnline && frontendOnline) {
+                    showAlert('✅ Both servers are running!', 'success');
+                } else if (backendOnline || frontendOnline) {
+                    showAlert('⚠️ ' + (backendOnline ? 'Backend' : 'Frontend') + ' is running, but the other is offline.', 'error');
+                } else {
+                    showAlert('❌ No servers are running. Please click "Launch Servers".', 'error');
+                }
+            } catch (e) {
+                showAlert('❌ Error checking status: ' + e.message, 'error');
+            }
+        }
+
+        function updateStatus(backendOnline, frontendOnline) {
+            // Backend
+            const backendStatusEl = document.getElementById('backend-status');
+            const backendTextEl = document.getElementById('backend-status-text');
+            const backendUrlEl = document.getElementById('backend-url');
+            
+            if (backendOnline) {
+                backendStatusEl.className = 'status-indicator online';
+                backendTextEl.textContent = '🟢 Online';
+                backendUrlEl.classList.remove('disabled');
+            } else {
+                backendStatusEl.className = 'status-indicator offline';
+                backendTextEl.textContent = '🔴 Offline';
+                backendUrlEl.classList.add('disabled');
+            }
+
+            // Frontend
+            const frontendStatusEl = document.getElementById('frontend-status');
+            const frontendTextEl = document.getElementById('frontend-status-text');
+            const frontendUrlEl = document.getElementById('frontend-url');
+            
+            if (frontendOnline) {
+                frontendStatusEl.className = 'status-indicator online';
+                frontendTextEl.textContent = '🟢 Online';
+                frontendUrlEl.classList.remove('disabled');
+            } else {
+                frontendStatusEl.className = 'status-indicator offline';
+                frontendTextEl.textContent = '🔴 Offline';
+                frontendUrlEl.classList.add('disabled');
+            }
+        }
+
+        function launchServers() {
+            showAlert('⏳ Launching servers... This will open new windows. Please wait...', 'info');
+            
+            // In a real scenario, you'd call a backend API to launch servers
+            // For now, we'll show instructions
+            alert('To launch servers:\n\n' +
+                  'Windows (PowerShell):\n' +
+                  'Right-click on "Launch.ps1" and select "Run with PowerShell"\n\n' +
+                  'Windows (Command Prompt):\n' +
+                  'Double-click on "Launch.bat"\n\n' +
+                  'macOS/Linux:\n' +
+                  'Run: chmod +x Launch.sh && ./Launch.sh');
+            
+            // Auto-check status after delay
+            setTimeout(() => {
+                checkStatus();
+            }, 8000);
+        }
+
+        function stopServers() {
+            if (confirm('Are you sure you want to stop the servers?\n\nNote: You can also close the server windows directly.')) {
+                showAlert('⏳ Attempting to stop servers...', 'info');
+                
+                alert('To stop servers:\n\n' +
+                      '1. Close the server terminal windows, OR\n' +
+                      '2. Run this command in PowerShell:\n' +
+                      '   Stop-Process -Name node -Force');
+                
+                setTimeout(() => {
+                    checkStatus();
+                }, 2000);
+            }
+        }
+
+        function showAlert(message, type = 'info') {
+            const alertEl = document.getElementById('alert');
+            alertEl.textContent = message;
+            alertEl.className = 'alert ' + type;
+            
+            if (type !== 'info') {
+                setTimeout(() => {
+                    alertEl.className = 'alert';
+                }, 5000);
+            }
+        }
+
+        // Auto-check status on page load
+        window.addEventListener('load', () => {
+            setTimeout(checkStatus, 1000);
+            // Check every 10 seconds
+            setInterval(checkStatus, 10000);
+        });
+    </script>
+</body>
+</html>
