@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
+const cron = require('node-cron');
 
 const helmet = require("helmet");
 const compression = require("compression");
@@ -23,6 +24,17 @@ app.use(express.static(path.join(__dirname, "uploads")));
 app.use(helmet());
 app.use(compression());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
+
+// Health check endpoint for Railway
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
+// Daily cron job example
+cron.schedule('0 0 * * *', () => {
+  // Place your daily task code here
+  console.log('Running daily cron job!');
+});
 
 // ========================= DATABASE CONNECTION =========================
 const DB_PORT = parseInt(process.env.DB_PORT) || 3306;
