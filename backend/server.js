@@ -694,7 +694,7 @@ app.get("/admin/dashboard", (req, res) => {
 
 // ========================= START SERVER =========================
 const PORT = parseInt(process.env.PORT) || 5000;
-const HOST = process.env.HOST || '127.0.0.1'; // Localhost
+const HOST = process.env.HOST || '0.0.0.0'; // Bind externally for Railway
 
 app.listen(PORT, HOST, () => {
   console.log(`🚀 Server running on http://${HOST}:${PORT} (${process.env.NODE_ENV})`);
