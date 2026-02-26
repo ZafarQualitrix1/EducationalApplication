@@ -38,6 +38,7 @@ const MentorPage = ({ mentorId }) => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [sortBy, setSortBy] = useState('ranking');
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!mentorIdToUse) {
       setLoading(false);

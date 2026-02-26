@@ -5,8 +5,9 @@ import './AdminPage.css';
 import { FaSignOutAlt } from 'react-icons/fa';
 import BackButton from './BackButton';
 
-const AdminPage = ({ adminId }) => {
+const AdminPage = () => {
   const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars
   const [admin, setAdmin] = useState(null);
   const [dashboardStats, setDashboardStats] = useState({
     totalStudents: 0,
@@ -20,10 +21,12 @@ const AdminPage = ({ adminId }) => {
   const [financialData, setFinancialData] = useState(null);
   const [attendance, setAttendance] = useState([]);
   const [activeTab, setActiveTab] = useState('dashboard');
+  // eslint-disable-next-line no-unused-vars
   const [selectedMentor, setSelectedMentor] = useState(null);
   const [filterStatus, setFilterStatus] = useState('all');
   const [loading, setLoading] = useState(true);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     // Check if admin is logged in
     const adminData = localStorage.getItem('admin');

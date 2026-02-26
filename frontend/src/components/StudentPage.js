@@ -19,10 +19,10 @@ const StudentPage = ({ studentId }) => {
   const [studyMinutes, setStudyMinutes] = useState(0);
   const [loading, setLoading] = useState(true);
   const [courses, setCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState(null);
   const [showEnrollmentModal, setShowEnrollmentModal] = useState(false);
   const [enrollmentCourse, setEnrollmentCourse] = useState(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     loadDashboardData();
     loadCourses();
